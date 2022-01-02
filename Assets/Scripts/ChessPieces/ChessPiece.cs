@@ -22,6 +22,10 @@ public class ChessPiece : MonoBehaviour
     private const float MODEL_SCALE = 25f;
     private Vector3 desiredScale = Vector3.one;
 
+    private void Start()
+    {
+        transform.rotation = Quaternion.Euler((team) == 0 ? new Vector3(-90, 0, 0) : new Vector3(-90, 0, 180));
+    }
     private void Update()
     {
         transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10);
