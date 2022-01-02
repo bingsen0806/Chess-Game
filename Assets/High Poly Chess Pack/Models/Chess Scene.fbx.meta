@@ -1,0 +1,252 @@
+fileFormatVersion: 2
+guid: f5edbe7e601e05143b29e56c2de68b97
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Bishop
+    100002: Bishop 1
+    100004: Bishop 1.001
+    100006: Bishop.001
+    100008: Bronze Pieces
+    100010: Chess Board
+    100012: Chess Board Surround
+    100014: Chess Board.001
+    100016: //RootNode
+    100018: King
+    100020: King.001
+    100022: Knight
+    100024: Knight.001
+    100026: Knight.002
+    100028: Knight.003
+    100030: Pawn
+    100032: Pawn.001
+    100034: Pawn.002
+    100036: Pawn.003
+    100038: Pawn.004
+    100040: Pawn.005
+    100042: Pawn.006
+    100044: Pawn.007
+    100046: Pawn.008
+    100048: Pawn.009
+    100050: Pawn.010
+    100052: Pawn.011
+    100054: Pawn.012
+    100056: Pawn.013
+    100058: Pawn.014
+    100060: Pawn.015
+    100062: Queen
+    100064: Queen.001
+    100066: Rook
+    100068: Rook 1
+    100070: Rook 1.001
+    100072: Rook.001
+    100074: White Pieces.002
+    400000: Bishop
+    400002: Bishop 1
+    400004: Bishop 1.001
+    400006: Bishop.001
+    400008: Bronze Pieces
+    400010: Chess Board
+    400012: Chess Board Surround
+    400014: Chess Board.001
+    400016: //RootNode
+    400018: King
+    400020: King.001
+    400022: Knight
+    400024: Knight.001
+    400026: Knight.002
+    400028: Knight.003
+    400030: Pawn
+    400032: Pawn.001
+    400034: Pawn.002
+    400036: Pawn.003
+    400038: Pawn.004
+    400040: Pawn.005
+    400042: Pawn.006
+    400044: Pawn.007
+    400046: Pawn.008
+    400048: Pawn.009
+    400050: Pawn.010
+    400052: Pawn.011
+    400054: Pawn.012
+    400056: Pawn.013
+    400058: Pawn.014
+    400060: Pawn.015
+    400062: Queen
+    400064: Queen.001
+    400066: Rook
+    400068: Rook 1
+    400070: Rook 1.001
+    400072: Rook.001
+    400074: White Pieces.002
+    2100000: Glass Silver
+    2100002: Glass Amber
+    2100004: Chess Board
+    2100006: White Square
+    2100008: Black Square
+    2300000: Bishop
+    2300002: Bishop 1
+    2300004: Bishop 1.001
+    2300006: Bishop.001
+    2300008: Chess Board Surround
+    2300010: Chess Board.001
+    2300012: King
+    2300014: King.001
+    2300016: Knight
+    2300018: Knight.001
+    2300020: Knight.002
+    2300022: Knight.003
+    2300024: Pawn
+    2300026: Pawn.001
+    2300028: Pawn.002
+    2300030: Pawn.003
+    2300032: Pawn.004
+    2300034: Pawn.005
+    2300036: Pawn.006
+    2300038: Pawn.007
+    2300040: Pawn.008
+    2300042: Pawn.009
+    2300044: Pawn.010
+    2300046: Pawn.011
+    2300048: Pawn.012
+    2300050: Pawn.013
+    2300052: Pawn.014
+    2300054: Pawn.015
+    2300056: Queen
+    2300058: Queen.001
+    2300060: Rook
+    2300062: Rook 1
+    2300064: Rook 1.001
+    2300066: Rook.001
+    3300000: Bishop
+    3300002: Bishop 1
+    3300004: Bishop 1.001
+    3300006: Bishop.001
+    3300008: Chess Board Surround
+    3300010: Chess Board.001
+    3300012: King
+    3300014: King.001
+    3300016: Knight
+    3300018: Knight.001
+    3300020: Knight.002
+    3300022: Knight.003
+    3300024: Pawn
+    3300026: Pawn.001
+    3300028: Pawn.002
+    3300030: Pawn.003
+    3300032: Pawn.004
+    3300034: Pawn.005
+    3300036: Pawn.006
+    3300038: Pawn.007
+    3300040: Pawn.008
+    3300042: Pawn.009
+    3300044: Pawn.010
+    3300046: Pawn.011
+    3300048: Pawn.012
+    3300050: Pawn.013
+    3300052: Pawn.014
+    3300054: Pawn.015
+    3300056: Queen
+    3300058: Queen.001
+    3300060: Rook
+    3300062: Rook 1
+    3300064: Rook 1.001
+    3300066: Rook.001
+    4300000: King.001
+    4300002: Queen.001
+    4300004: Bishop.001
+    4300006: Knight.003
+    4300008: Rook.001
+    4300010: Pawn.015
+    4300012: Bishop 1
+    4300014: Knight.001
+    4300016: Rook 1
+    4300018: Pawn.007
+    4300020: Queen
+    4300022: King
+    4300024: Chess Board Surround
+    4300026: Chess Board.001
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
