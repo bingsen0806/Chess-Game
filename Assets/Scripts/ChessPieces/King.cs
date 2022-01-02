@@ -11,7 +11,7 @@ public class King : ChessPiece
         var leftRook = moveList.Find(m => m[0].x == 0 && m[0].y == ((team == 0) ? 0 : 7));
         var rightRook = moveList.Find(m => m[0].x == 7 && m[0].y == ((team == 0) ? 0 : 7));
 
-        if (kingMove == null & currentX == 4)
+        if (kingMove == null && currentX == 4)
         {
             int yCoord = (team == 0) ? 0 : 7;
             //Left rook

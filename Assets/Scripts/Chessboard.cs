@@ -97,6 +97,8 @@ public class Chessboard : MonoBehaviour
                         TILE_COUNT_X, TILE_COUNT_Y);
                         //Get a list of special moves
                         specialMove = currentlyDragging.GetSpecialMoves(ref chessPieces, ref moveList, ref availableMoves);
+
+                        PreventCheck();
                         HighlightTiles();
                     }
                 }
@@ -256,6 +258,10 @@ public class Chessboard : MonoBehaviour
 
     private void PositionSinglePiece(int x, int y, bool force = false)
     {
+        if (chessPieces[x, y] == null)
+        {
+            return;
+        }
         ChessPieceType cpType = chessPieces[x, y].type;
         chessPieces[x, y].currentX = x;
         chessPieces[x, y].currentY = y;
@@ -298,12 +304,18 @@ public class Chessboard : MonoBehaviour
         victoryScreen.SetActive(true);
         victoryScreen.transform.GetChild(winningTeam).gameObject.SetActive(true);
     }
+    private void Stalemate()
+    {
+        victoryScreen.SetActive(true);
+        victoryScreen.transform.GetChild(2).gameObject.SetActive(true);
+    }
 
     public void OnResetButton()
     {
         //Disable UI
         victoryScreen.transform.GetChild(0).gameObject.SetActive(false);
         victoryScreen.transform.GetChild(1).gameObject.SetActive(false);
+        victoryScreen.transform.GetChild(2).gameObject.SetActive(false);
         victoryScreen.SetActive(false);
 
         //Fields reset
@@ -346,6 +358,7 @@ public class Chessboard : MonoBehaviour
         Application.Quit();
     }
 
+    //Special Moves
     private void ProcessSpecialMove()
     {
 
@@ -454,6 +467,172 @@ public class Chessboard : MonoBehaviour
             }
         }
     }
+    private void PreventCheck()
+    {
+        ChessPiece targetKing = null;
+        for (int x = 0; x < TILE_COUNT_X; x++)
+        {
+            for (int y = 0; y < TILE_COUNT_Y; y++)
+            {
+                if (chessPieces[x, y] != null
+                && chessPieces[x, y].type == ChessPieceType.King
+                && chessPieces[x, y].team == currentlyDragging.team)
+                {
+                    targetKing = chessPieces[x, y];
+                }
+            }
+        }
+        SimulateMoveForSinglePiece(currentlyDragging, ref availableMoves, targetKing);
+    }
+
+    private int SimulateMoveForSinglePiece(ChessPiece cp, ref List<Vector2Int> moves, ChessPiece targetKing)
+    {
+        //Save the current values, to reset after function call
+        int actualX = cp.currentX;
+        int actualY = cp.currentY;
+        List<Vector2Int> movesToRemove = new List<Vector2Int>();
+
+        //Go through all moves and check whether King will be checked if mvoe performed
+        for (int i = 0; i < moves.Count; i++)
+        {
+            int simulationX = moves[i].x;
+            int simulationY = moves[i].y;
+            Vector2Int kingPositionThisSim = new Vector2Int(targetKing.currentX, targetKing.currentY);
+            //If King is the chess piece moved
+            if (cp.type == ChessPieceType.King)
+            {
+                kingPositionThisSim = new Vector2Int(simulationX, simulationY);
+            }
+
+            //Copy chessPieces into simulation
+            ChessPiece[,] simulation = new ChessPiece[TILE_COUNT_X, TILE_COUNT_Y];
+            List<ChessPiece> nextRoundAttackingPieces = new List<ChessPiece>();
+            for (int x = 0; x < TILE_COUNT_X; x++)
+            {
+                for (int y = 0; y < TILE_COUNT_Y; y++)
+                {
+                    if (chessPieces[x, y] != null)
+                    {
+                        simulation[x, y] = chessPieces[x, y];
+                        if (simulation[x, y].team != cp.team)
+                        {
+                            nextRoundAttackingPieces.Add(simulation[x, y]);
+                        }
+                    }
+                }
+            }
+
+            //Simulate moving current piece
+            simulation[actualX, actualY] = null;
+            cp.currentX = simulationX;
+            cp.currentY = simulationY;
+            simulation[simulationX, simulationY] = cp;
+
+            //Simulate current piece taking opponents piece, if any
+            var deadPiece = nextRoundAttackingPieces.Find(x => x.currentX == simulationX && x.currentY == simulationY);
+            if (deadPiece != null)
+            {
+                nextRoundAttackingPieces.Remove(deadPiece);
+            }
+
+            //Simulate and calculate whether King is endangered
+            //1. Get moves of all attacking pieces
+            List<Vector2Int> simMoves = new List<Vector2Int>();
+            for (int a = 0; a < nextRoundAttackingPieces.Count; a++)
+            {
+                var pieceMoves = nextRoundAttackingPieces[a].GetAvailableMoves(ref simulation, TILE_COUNT_X, TILE_COUNT_Y);
+                for (int b = 0; b < pieceMoves.Count; b++)
+                {
+                    simMoves.Add(pieceMoves[b]);
+                }
+            }
+            //2. Add the King's move to be removed later, if any moves by opponent can take it next turn
+            if (ContainsValidMove(ref simMoves, kingPositionThisSim))
+            {
+                movesToRemove.Add(moves[i]);
+            }
+
+            //Restore the position of current piece
+            cp.currentX = actualX;
+            cp.currentY = actualY;
+        }
+
+        //Remove all moves that will cause King to be checked
+        for (int i = 0; i < movesToRemove.Count; i++)
+        {
+            moves.Remove(movesToRemove[i]);
+        }
+        return moves.Count;
+    }
+    private StateAfterMove CheckForCheckmate()
+    {
+        var lastMove = moveList[moveList.Count - 1];
+        int defendingTeam = (chessPieces[lastMove[1].x, lastMove[1].y].team == 0) ? 1 : 0;
+        ChessPiece targetKing = null;
+        List<ChessPiece> attackingPieces = new List<ChessPiece>();
+        List<ChessPiece> defendingPieces = new List<ChessPiece>();
+        for (int x = 0; x < TILE_COUNT_X; x++)
+        {
+            for (int y = 0; y < TILE_COUNT_Y; y++)
+            {
+                if (chessPieces[x, y] != null)
+                {
+                    if (chessPieces[x, y].team == defendingTeam)
+                    {
+                        defendingPieces.Add(chessPieces[x, y]);
+                        if (chessPieces[x, y].type == ChessPieceType.King)
+                        {
+                            targetKing = chessPieces[x, y];
+                        }
+                    }
+                    else
+                    {
+                        attackingPieces.Add(chessPieces[x, y]);
+                    }
+                }
+            }
+        }
+
+        //Is the king attacked right now
+        List<Vector2Int> currentAvailableMoves = new List<Vector2Int>();
+        for (int i = 0; i < attackingPieces.Count; i++)
+        {
+            var pieceMoves = attackingPieces[i].GetAvailableMoves(ref chessPieces, TILE_COUNT_X, TILE_COUNT_Y);
+            for (int j = 0; j < pieceMoves.Count; j++)
+            {
+                currentAvailableMoves.Add(pieceMoves[j]);
+            }
+        }
+        bool inChecked = ContainsValidMove(ref currentAvailableMoves, new Vector2Int(targetKing.currentX, targetKing.currentY));
+        //Can any pieces defend the King, or can the King run
+        //1. Can we move something to defend King?
+        if (inChecked)
+        {
+            for (int i = 0; i < defendingPieces.Count; i++)
+            {
+                List<Vector2Int> defendingMoves = defendingPieces[i].GetAvailableMoves(ref chessPieces, TILE_COUNT_X, TILE_COUNT_Y);
+                int numOfPossibleDefends = SimulateMoveForSinglePiece(defendingPieces[i], ref defendingMoves, targetKing);
+                if (numOfPossibleDefends > 0)
+                {
+                    return StateAfterMove.Play;
+                }
+            }
+            return StateAfterMove.Checkmate;
+        }
+        else
+        {
+            for (int i = 0; i < defendingPieces.Count; i++)
+            {
+                List<Vector2Int> defendingMoves = defendingPieces[i].GetAvailableMoves(ref chessPieces, TILE_COUNT_X, TILE_COUNT_Y);
+                int numOfPossibleDefends = SimulateMoveForSinglePiece(defendingPieces[i], ref defendingMoves, targetKing);
+                if (numOfPossibleDefends > 0)
+                {
+                    return StateAfterMove.Play;
+                }
+            }
+            return StateAfterMove.Stalemate;
+        }
+    }
 
     //Operations
     private bool ContainsValidMove(ref List<Vector2Int> moves, Vector2Int pos)
@@ -534,8 +713,22 @@ public class Chessboard : MonoBehaviour
         isWhiteTurn = !isWhiteTurn;
         moveList.Add(new Vector2Int[] { previousPosition, new Vector2Int(x, y) });
         ProcessSpecialMove(); //e.g. if En Passant executed, need to remove opponent piece
+        StateAfterMove state = CheckForCheckmate();
+        if (state == StateAfterMove.Checkmate)
+        {
+            CheckMate(cp.team);
+        }
+        else if (state == StateAfterMove.Stalemate)
+        {
+            Stalemate();
+        }
         return true;
     }
 
 
+}
+
+public enum StateAfterMove
+{
+    Play, Stalemate, Checkmate
 }
