@@ -189,8 +189,8 @@ public class Chessboard : MonoBehaviour
         }
 
         //Black team
-        chessPieces[0, 7] = SpawnSinglePiece(ChessPieceType.Knight, blackTeam);
-        chessPieces[1, 7] = SpawnSinglePiece(ChessPieceType.Rook, blackTeam);
+        chessPieces[0, 7] = SpawnSinglePiece(ChessPieceType.Rook, blackTeam);
+        chessPieces[1, 7] = SpawnSinglePiece(ChessPieceType.Knight, blackTeam);
         chessPieces[2, 7] = SpawnSinglePiece(ChessPieceType.Bishop, blackTeam);
         chessPieces[3, 7] = SpawnSinglePiece(ChessPieceType.Queen, blackTeam);
         chessPieces[4, 7] = SpawnSinglePiece(ChessPieceType.King, blackTeam);
@@ -310,6 +310,7 @@ public class Chessboard : MonoBehaviour
         currentlyDragging = null;
         availableMoves.Clear();
         moveList.Clear();
+        specialMove = SpecialMove.None;
 
         //Clean up
         for (int x = 0; x < TILE_COUNT_X; x++)
@@ -382,6 +383,74 @@ public class Chessboard : MonoBehaviour
                     + heightDifferenceBetweenFrameAndBoard, 0));
                 }
                 chessPieces[opponentPawn.currentX, opponentPawn.currentY] = null;
+            }
+        }
+
+        //Possibility of promotion
+        if (specialMove == SpecialMove.Promotion)
+        {
+            Vector2Int[] lastMove = moveList[moveList.Count - 1];
+            ChessPiece targetPawn = chessPieces[lastMove[1].x, lastMove[1].y];
+            if (targetPawn.type == ChessPieceType.Pawn)
+            {
+                if (targetPawn.team == 0 && lastMove[1].y == 7)
+                {
+                    ChessPiece newQueen = SpawnSinglePiece(ChessPieceType.Queen, 0);
+                    newQueen.transform.position = chessPieces[lastMove[1].x, lastMove[1].y].transform.position;
+                    Destroy(chessPieces[lastMove[1].x, lastMove[1].y].gameObject);
+                    chessPieces[lastMove[1].x, lastMove[1].y] = newQueen;
+                    PositionSinglePiece(lastMove[1].x, lastMove[1].y);
+                }
+                if (targetPawn.team == 1 && lastMove[1].y == 0)
+                {
+                    ChessPiece newQueen = SpawnSinglePiece(ChessPieceType.Queen, 1);
+                    newQueen.transform.position = chessPieces[lastMove[1].x, lastMove[1].y].transform.position;
+                    Destroy(chessPieces[lastMove[1].x, lastMove[1].y].gameObject);
+                    chessPieces[lastMove[1].x, lastMove[1].y] = newQueen;
+                    PositionSinglePiece(lastMove[1].x, lastMove[1].y);
+                }
+            }
+        }
+
+        //Possibility of Castling performed as it is valid
+        if (specialMove == SpecialMove.Castling)
+        {
+            Vector2Int[] lastMove = moveList[moveList.Count - 1];
+            //Left Rook
+            if (lastMove[1].x == 2)
+            {
+                if (lastMove[1].y == 0)
+                { //White side
+                    ChessPiece rook = chessPieces[0, 0];
+                    chessPieces[3, 0] = rook;
+                    PositionSinglePiece(3, 0);
+                    chessPieces[0, 0] = null;
+                }
+                else if (lastMove[1].y == 7)
+                { //Black side
+                    ChessPiece rook = chessPieces[0, 7];
+                    chessPieces[3, 7] = rook;
+                    PositionSinglePiece(3, 7);
+                    chessPieces[0, 7] = null;
+                }
+            }
+            //Right Rook
+            else if (lastMove[1].x == 6)
+            {
+                if (lastMove[1].y == 0)
+                { //White side
+                    ChessPiece rook = chessPieces[7, 0];
+                    chessPieces[5, 0] = rook;
+                    PositionSinglePiece(5, 0);
+                    chessPieces[7, 0] = null;
+                }
+                else if (lastMove[1].y == 7)
+                { //Black side
+                    ChessPiece rook = chessPieces[7, 7];
+                    chessPieces[5, 7] = rook;
+                    PositionSinglePiece(5, 7);
+                    chessPieces[7, 7] = null;
+                }
             }
         }
     }
