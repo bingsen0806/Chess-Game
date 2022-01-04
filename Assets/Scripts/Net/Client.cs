@@ -25,6 +25,11 @@ public class Client : MonoBehaviour
         NetworkEndPoint endPoint = NetworkEndPoint.Parse(ip, port);
         connection = driver.Connect(endPoint);
         Debug.Log("Attempting to connect to Server on " + endPoint.Address);
+        if (connection == null || connection == default(NetworkConnection))
+        {
+            Debug.Log("connection unsuccessful");
+            return;
+        }
         isActive = true;
         RegisterToEvent();
     }
@@ -75,7 +80,7 @@ public class Client : MonoBehaviour
         {
             if (cmd == NetworkEvent.Type.Connect)
             {
-                //SendToServer(new NetWelcome());
+                SendToServer(new NetWelcome());
                 Debug.Log("Connected");
             }
             if (cmd == NetworkEvent.Type.Data)
